@@ -2,16 +2,14 @@
 Garden Advice App - Provides gardening tips based on month and season
 
 This application helps gardening enthusiasts get appropriate gardening advice
-based on the current month and season. It includes TODO comments for potential
-improvements.
+based on the current month and season. The code has been refactored to use
+well-organized functions for better maintainability.
 """
 
-# TODO: Create a function to get the current month instead of hardcoding
-# TODO: Add proper documentation (docstrings) for all functions
-# TODO: Replace hardcoded values with configurable constants
+import datetime
 
-# Seasonal gardening advice dictionary
-gardening_advice = {
+# Constants for seasonal advice
+SEASONAL_ADVICE = {
     "Spring": "Plant new flowers, prepare soil, and start vegetable seeds.",
     "Summer": "Water plants regularly, harvest vegetables, and watch for pests.",
     "Autumn": "Clean up fallen leaves, plant spring bulbs, and prepare for winter.",
@@ -19,7 +17,7 @@ gardening_advice = {
 }
 
 # Monthly specific tasks
-monthly_tasks = {
+MONTHLY_TASKS = {
     1: "Prune dormant trees and shrubs.",
     2: "Start planning your spring garden layout.",
     3: "Begin planting cool-season vegetables.",
@@ -33,6 +31,17 @@ monthly_tasks = {
     11: "Protect sensitive plants from cold.",
     12: "Plan next year's garden and order seeds."
 }
+
+
+def get_current_month():
+    """
+    Get the current month number using datetime module.
+    
+    Returns:
+        int: Current month number (1-12)
+    """
+    return datetime.datetime.now().month
+
 
 def get_season(month):
     """
@@ -53,30 +62,54 @@ def get_season(month):
     else:
         return "Winter"
 
-# TODO: Create a separate function to display advice instead of doing it directly
-def display_gardening_advice():
+
+def get_seasonal_advice(season):
     """
-    Display gardening advice based on the current month.
+    Get gardening advice for a specific season.
     
-    This function retrieves the current month and displays seasonal advice
-    along with monthly tasks.
+    Args:
+        season (str): Season name
+    
+    Returns:
+        str: Gardening advice for the season
     """
-    # TODO: Use datetime module to get current month automatically
-    current_month = 6  # Hardcoded for demonstration
+    return SEASONAL_ADVICE.get(season, "No specific advice for this season.")
+
+
+def get_monthly_task(month):
+    """
+    Get the gardening task for a specific month.
     
-    season = get_season(current_month)
+    Args:
+        month (int): Month number (1-12)
+    
+    Returns:
+        str: Monthly gardening task
+    """
+    return MONTHLY_TASKS.get(month, "No specific task for this month.")
+
+
+def display_gardening_advice(month):
+    """
+    Display gardening advice based on the provided month.
+    
+    Args:
+        month (int): Month number (1-12)
+    """
+    season = get_season(month)
+    season_advice = get_seasonal_advice(season)
+    monthly_task = get_monthly_task(month)
     
     print("=" * 60)
     print("GARDENING ADVICE FOR TODAY")
     print("=" * 60)
     print(f"\nSeason: {season}")
-    print(f"Advice: {gardening_advice.get(season, 'No specific advice for this season.')}")
-    
-    print(f"\nMonthly Task for Month {current_month}:")
-    print(monthly_tasks.get(current_month, "No specific task for this month."))
+    print(f"Advice: {season_advice}")
+    print(f"\nMonthly Task for Month {month}:")
+    print(monthly_task)
     print("\n" + "=" * 60)
 
-# TODO: Add error handling for invalid inputs
+
 def get_month_input():
     """
     Get month input from user with validation.
@@ -95,7 +128,21 @@ def get_month_input():
         print("Please enter a valid number.")
         return get_month_input()
 
-if __name__ == "__main__":
+
+def main():
+    """
+    Main function to run the Garden Advice App.
+    """
     print("Welcome to the Garden Advice App!")
-    display_gardening_advice()
+    
+    # Get user input for month
+    month = get_month_input()
+    
+    # Display the gardening advice
+    display_gardening_advice(month)
+    
     print("\nThank you for using the Garden Advice App!")
+
+
+if __name__ == "__main__":
+    main()
